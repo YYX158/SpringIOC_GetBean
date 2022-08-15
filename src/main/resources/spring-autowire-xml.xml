@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="com.atyyx.spring.Controller.UserController" autowire="byType">
+<!--        <property name="userService" ref="userService"/>  &lt;!&ndash;类类型的注入&ndash;&gt;-->
+    </bean>
+
+    <bean id="userService" class="com.atyyx.spring.Service.impl.UserServiceImpl" autowire="byType">
+<!--        <property name="userDao" ref="userDao"/>-->
+    </bean>
+
+    <bean id="userDao" class="com.atyyx.spring.dao.impl.UserDaoImpl">
+
+    </bean>
+
+</beans>
