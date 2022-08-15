@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+    bean标签配置一个bena对象，将对象交给IOC容器管理
+    属性：
+    id：是bean的唯一标识 ，不能重复
+    class：设置bean对象所对应的类型
+    -->
+    <bean id="helloworld" class="com.atyyx.spring.pojo.Helloworld"></bean>
+    <bean id="studentOne" class="com.atyyx.spring.pojo.Student">
+        <!--set()方式注入-->
+        <property name="sid" value="1"/>
+        <property name="age" value="18"/>
+        <property name="sname" value="王赛"/>
+        <property name="gender" value="男"/>
+    </bean>
+<!--    <bean id="studentThree" class="com.atyyx.spring.pojo.Student">-->
+<!--        &lt;!&ndash;注意：-->
+<!--        需要按照有参构造器中参数的顺序进行配置-->
+<!--        按照构造器来操作-->
+<!--        &ndash;&gt;-->
+<!--        <constructor-arg value="2"/>-->
+<!--        <constructor-arg value="李雅琪"/>-->
+<!--        <constructor-arg value="20"/>-->
+<!--        <constructor-arg value="女"/>-->
+<!--        <constructor-arg value="98" name="score"/>-->
+<!--    </bean>-->
+<!--    <bean id="studentFour" class="com.atyyx.spring.pojo.Student">-->
+<!--        &lt;!&ndash;给特殊值赋值&ndash;&gt;-->
+<!--        <constructor-arg value="3" name="sid"/>-->
+<!--        <constructor-arg value="杨宇鑫" name="sname"/>-->
+<!--        <constructor-arg value="22" name="age"/>-->
+<!--        <constructor-arg name="gender"><null/></constructor-arg>  &lt;!&ndash;为这个标签设置为null&ndash;&gt;-->
+<!--        <constructor-arg value="100" name="score"/>-->
+<!--    </bean>-->
+<!--    <bean id="studentFive" class="com.atyyx.spring.pojo.Student">-->
+<!--        &lt;!&ndash;给特殊值赋值&ndash;&gt;-->
+<!--        <constructor-arg value="4" name="sid"/>-->
+<!--&lt;!&ndash;        <constructor-arg value="&lt;陈昌耀&gt;" name="sname"/>&ndash;&gt;-->
+<!--        <constructor-arg  name="sname">-->
+<!--            &lt;!&ndash;-->
+<!--            将CDATA区写出来：  写一个CD然后回车，利用idea的快捷方式写出来-->
+<!--            这里面不会做转义-->
+<!--            怎么写的就怎么展示出来-->
+<!--            CDATA节是xml中一个特殊的标签，因此不能写在一个属性中，只能以一个标签来显示-->
+<!--            &ndash;&gt;-->
+<!--            <value><![CDATA[<陈昌耀>]]></value>-->
+<!--        </constructor-arg>-->
+<!--        <constructor-arg value="22" name="age"/>-->
+<!--        <constructor-arg name="gender"><null/></constructor-arg>  &lt;!&ndash;为这个标签设置为null&ndash;&gt;-->
+<!--        <constructor-arg value="85" name="score"/>-->
+<!--    </bean>-->
+
+    <bean id="studentSix" class="com.atyyx.spring.pojo.Student">
+        <property name="sid" value="5"/>
+        <property name="age" value="19"/>
+        <property name="sname" value="cbz"/>
+        <property name="gender" value="男"/>
+        <property name="score" value="65"/>
+<!--        <property name="belongClass" ref="ClassOne"/>  &lt;!&ndash;ref表示是引用数据类型&ndash;&gt;-->
+<!--        &lt;!&ndash;-->
+<!--        利用级联方式-->
+<!--        级联的方式用的不太多，主要是跟mybatis不一样，要先对类进行赋值以后才能进行修改。-->
+<!--        &ndash;&gt;-->
+<!--        -->
+<!--        <property name="belongClass.cid" value="18003"/>-->
+<!--        <property name="belongClass.cname" value="18计算机(3)"/>-->
+        <property name="belongClass">
+            <!--利用内部bean进行赋值，一般经常用的只有1,3两种方式-->
+            <bean id="classInner" class="com.atyyx.spring.pojo.Class">
+                <property name="cid" value="18002"/>
+                <property name="cname" value="18计算机(2)"/>
+            </bean>
+        </property>
+        <property name="hobby">  <!--给数组对象进行赋值-->
+            <array>
+                <value>抽烟</value>
+                <value>喝酒</value>
+                <value>烫头</value>
+                <value>打架</value>
+            </array>
+        </property>
+<!--        <property name="teacherMap">   &lt;!&ndash;util.map的功能是用来设置util的map&ndash;&gt;-->
+<!--            <map>  &lt;!&ndash;为map对象赋值&ndash;&gt;-->
+<!--                <entry key="10086" value-ref="tearcherOne"/>-->
+<!--                <entry key="12306" value-ref="tearcherTwo"/>-->
+<!--            </map>-->
+<!--        </property>-->
+        <property name="teacherMap" ref="teacherMap"/>
+    </bean>
+    <bean id="ClassOne" class="com.atyyx.spring.pojo.Class">
+        <property name="cid" value="18001"/>
+        <property name="cname" value="18计算机(1)"/>
+<!--        <property name="studentList">-->
+<!--            <list>-->
+<!--              <ref bean="studentSix"/>-->
+<!--                <ref bean="studentOne"/>-->
+<!--            </list>-->
+<!--        </property>-->
+        <property name="studentList" ref="studentList"/>  <!--采用外部引用的方式给list类对象进行赋值-->
+    </bean>
+
+    <!--
+    要配置一个集合类型的bean，需要使用util的约束
+    要注意一定要有util的约束，不然会用不了
+    要声明约束
+    -->
+    <util:list id="studentList">
+        <ref bean="studentOne"></ref>
+        <ref bean="studentSix"></ref>
+    </util:list>
+
+    <bean id="tearcherOne" class="com.atyyx.spring.pojo.Teacher">
+        <property name="tid" value="100"/>
+        <property name="tname" value="大宝"/>
+     </bean>
+    <bean id="tearcherTwo" class="com.atyyx.spring.pojo.Teacher">
+        <property name="tid" value="101"/>
+        <property name="tname" value="小宝"/>
+    </bean>
+
+    <util:map id="teacherMap">
+        <entry key="10086" value-ref="tearcherOne"/>
+        <entry key="12306" value-ref="tearcherTwo"/>
+    </util:map>
+
+    <bean id="StudentSeven" class="com.atyyx.spring.pojo.Student"
+          p:sid="1005" p:sname="小明" p:belongClass-ref="ClassOne" p:teacherMap-ref="teacherMap">
+
+    </bean>
+</beans>
